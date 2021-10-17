@@ -1,0 +1,87 @@
+{
+	"ABI version": 2,
+	"version": "2.1",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "addTask_Local",
+			"inputs": [
+				{"name":"name","type":"string"}
+			],
+			"outputs": [
+				{"name":"thisId","type":"uint8"}
+			]
+		},
+		{
+			"name": "addTask",
+			"inputs": [
+				{"name":"name","type":"string"}
+			],
+			"outputs": [
+				{"name":"thisId","type":"uint8"}
+			]
+		},
+		{
+			"name": "addTaskWITHTASKINFO",
+			"inputs": [
+				{"name":"name","type":"string"}
+			],
+			"outputs": [
+				{"components":[{"name":"name","type":"string"},{"name":"time","type":"uint32"},{"name":"done","type":"bool"}],"name":"B1","type":"tuple"}
+			]
+		},
+		{
+			"name": "getCountOfTasks_local",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint8"}
+			]
+		},
+		{
+			"name": "getTasks",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"teta","type":"string"}
+			]
+		},
+		{
+			"name": "makeTaskDone_local",
+			"inputs": [
+				{"name":"taskId","type":"uint8"}
+			],
+			"outputs": [
+				{"name":"value0","type":"bool"}
+			]
+		},
+		{
+			"name": "makeTaskDeleeted_local",
+			"inputs": [
+				{"name":"taskId","type":"uint8"}
+			],
+			"outputs": [
+				{"name":"value0","type":"bool"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"lastTaskId","type":"uint8"},
+		{"components":[{"name":"name","type":"string"},{"name":"time","type":"uint32"},{"name":"done","type":"bool"}],"name":"tasks","type":"map(uint8,tuple)"},
+		{"name":"beta","type":"string"}
+	]
+}
