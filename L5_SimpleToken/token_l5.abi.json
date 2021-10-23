@@ -1,0 +1,45 @@
+{
+	"ABI version": 2,
+	"version": "2.1",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "createToken",
+			"inputs": [
+				{"name":"tname","type":"string"},
+				{"name":"value_uint","type":"uint256"},
+				{"name":"value_str","type":"string"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "Sell",
+			"inputs": [
+				{"name":"id","type":"uint256"},
+				{"name":"cost","type":"uint256"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"components":[{"name":"name","type":"string"},{"name":"valueuint","type":"uint256"},{"name":"valuestr","type":"string"}],"name":"tArr","type":"tuple[]"},
+		{"name":"OnSale","type":"map(uint256,uint256)"},
+		{"name":"token_owner","type":"map(uint256,uint256)"}
+	]
+}
