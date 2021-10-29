@@ -1,0 +1,72 @@
+{
+	"ABI version": 2,
+	"version": "2.1",
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "Damage",
+			"inputs": [
+				{"name":"value","type":"int256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "SetArmor",
+			"inputs": [
+				{"name":"value","type":"int256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "touch",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "killUnit",
+			"inputs": [
+				{"name":"dest","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "health",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"health","type":"int256"}
+			]
+		},
+		{
+			"name": "armor",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"armor","type":"int256"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	],
+	"fields": [
+		{"name":"_pubkey","type":"uint256"},
+		{"name":"_timestamp","type":"uint64"},
+		{"name":"_constructorFlag","type":"bool"},
+		{"name":"health","type":"int256"},
+		{"name":"armor","type":"int256"}
+	]
+}
