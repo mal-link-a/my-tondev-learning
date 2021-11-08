@@ -28,6 +28,13 @@ contract unit is controller
         d.Roster();
         tvm.accept();
     }
+    function killUnitByBase(address value) virtual external{ 
+        if (mybase == msg.sender)
+        {
+            tvm.accept();       
+        value.transfer(10, false, 160);
+        }
+    } 
 
     function Damager(icontroller tessst)virtual public
     {

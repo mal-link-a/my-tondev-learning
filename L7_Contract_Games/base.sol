@@ -22,7 +22,8 @@ contract base is controller{
     function killUnit(address value) virtual public override{     
         tvm.accept();       
         value.transfer(10, false, 160);
-    }  
+    } 
+     
 
     function Damage(int value)virtual public override{
         health = health-value+armor;
