@@ -5,7 +5,7 @@ pragma AbiHeader pubkey;
 
 
 import "MainDebot.sol";
-contract CreatorDebot is MainDebot{ //is MainDebot{ 
+contract BuDebot is MainDebot{ //is MainDebot{ 
 
     function start() public override {
         Terminal.input(tvm.functionId(saveUserPublicKey),"Please enter your public key",false);
@@ -24,7 +24,7 @@ contract CreatorDebot is MainDebot{ //is MainDebot{
             [
                 MenuItem("Create new item","",tvm.functionId(createBuy)), //createTask
                 MenuItem("Show list","",tvm.functionId(showList)),  // showTasks
-                MenuItem("Delete item","",tvm.functionId(deleteBuy))  // updateTask
+                MenuItem("Buy","",tvm.functionId(updateBuy))  // updateTask
             ]
         );
     }

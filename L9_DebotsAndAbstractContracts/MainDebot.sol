@@ -5,13 +5,13 @@ pragma AbiHeader pubkey;
 
 
 import "MyList.sol";
-import "../L9/lib/Debot.sol";
-import "../L9/lib/Terminal.sol";
-import "../L9/lib/Menu.sol";
-import "../L9/lib/AddressInput.sol";
-import "../L9/lib/ConfirmInput.sol";
-import "../L9/lib/Upgradable.sol";
-import "../L9/lib/Sdk.sol";
+import "../L9_DebotsAndAbstractContracts/lib/Debot.sol";
+import "../L9_DebotsAndAbstractContracts/lib/Terminal.sol";
+import "../L9_DebotsAndAbstractContracts/lib/Menu.sol";
+import "../L9_DebotsAndAbstractContracts/lib/AddressInput.sol";
+import "../L9_DebotsAndAbstractContracts/lib/ConfirmInput.sol";
+import "../L9_DebotsAndAbstractContracts/lib/Upgradable.sol";
+import "../L9_DebotsAndAbstractContracts/lib/Sdk.sol";
 struct Buy {
         uint32 id;
         string text; //Наименование
@@ -44,7 +44,7 @@ interface ITodo {
 
 
 
-contract MainDebot is Debot, Upgradable{ 
+abstract contract MainDebot is Debot, Upgradable{ 
     bytes m_icon;
     TvmCell public m_todoCode; // TODO contract code
     TvmCell public m_todoData;
@@ -57,6 +57,8 @@ contract MainDebot is Debot, Upgradable{
     uint32 m_buyID;  
     uint256 m_masterPubKey; // User pubkey
     address m_msigAddress;  // User wallet address
+    string temptext;
+    uint tempuint;
 
     uint32 INITIAL_BALANCE =  200000000;  // Initial TODO contract balance
 
@@ -75,13 +77,13 @@ contract MainDebot is Debot, Upgradable{
         _menu();
     }
 
-    function onSuccess() public view {
+    function onSuccess() public view {   //Код при наличии успешного контракта списка покупок
         _getBuyStat(tvm.functionId(setStat));
     }
 
-    function start() public override {
-        Terminal.input(tvm.functionId(savePublicKey),"Please enter your public key",false);
-    }
+   // function start() public override {
+  //      Terminal.input(tvm.functionId(savePublicKey),"Please enter your public key",false);
+  //  }
 
     /// @notice Returns Metadata about DeBot.
     function getDebotInfo() public functionID(0xDEB) override view returns(
@@ -104,8 +106,8 @@ contract MainDebot is Debot, Upgradable{
         return [ Terminal.ID, Menu.ID, AddressInput.ID, ConfirmInput.ID ];
     }
 
-    function savePublicKey(string value) public {
-        (uint res, bool status) = stoi("0x"+value);
+    function saveUserPublicKey(string value) public {  //Получаем публичный ключ юзера для работы и проверяем наличие списка покупок для него
+        (uint res, bool status) = stoi("0x"+value);  
         if (status) {
             m_masterPubKey = res;
 
@@ -116,32 +118,32 @@ contract MainDebot is Debot, Upgradable{
             Sdk.getAccountType(tvm.functionId(checkStatus), m_address);
 
         } else {
-            Terminal.input(tvm.functionId(savePublicKey),"Wrong public key. Try again!\nPlease enter your public key",false);
+            Terminal.input(tvm.functionId(saveUserPublicKey),"Wrong public key. Try again!\nPlease enter your public key",false);
         }
     }
 
 
-    function checkStatus(int8 acc_type) public {
-        if (acc_type == 1) { // acc is active and  contract is already deployed
+    function checkStatus(int8 acc_type) public {    //Проверим состояние контракта.  1 - контракт задеплоен и активен, 0 - залеплоен, -1 - ещё не задеплоен, 2 - заморожен
+        if (acc_type == 1) { 
             _getBuyStat(tvm.functionId(setStat));
 
-        } else if (acc_type == -1)  { // acc is inactive
+        } else if (acc_type == -1)  { 
             Terminal.print(0, "You don't have a Boylist yet, so a new contract with an initial balance of 0.2 tokens will be deployed");
             AddressInput.get(tvm.functionId(creditAccount),"Select a wallet for payment. We will ask you to sign two transactions");
 
-        } else  if (acc_type == 0) { // acc is uninitialized
+        } else  if (acc_type == 0) {
             Terminal.print(0, format(
                 "Deploying new contract. If an error occurs, check if your TODO contract has enough tokens on its balance"
             ));
             deploy();
 
-        } else if (acc_type == 2) {  // acc is frozen
+        } else if (acc_type == 2) {  
             Terminal.print(0, format("Can not continue: account {} is frozen", m_address));
         }
     }
 
 
-    function creditAccount(address value) public {
+    function creditAccount(address value) public {  //Для деплоя контракта. Получаем деньги
         m_msigAddress = value;
         optional(uint256) pubkey = 0;
         TvmCell empty;
@@ -153,15 +155,14 @@ contract MainDebot is Debot, Upgradable{
             time: uint64(now),
             expire: 0,
             callbackId: tvm.functionId(waitBeforeDeploy),
-            onErrorId: tvm.functionId(onErrorRepeatCredit)  // Just repeat if something went wrong
+            onErrorId: tvm.functionId(onErrorRepeatCredit)  
         }(m_address, INITIAL_BALANCE, false, 3, empty);
     }
 
-    function onErrorRepeatCredit(uint32 sdkError, uint32 exitCode) public {
-        // TODO: check errors if needed.
-        sdkError;
-        exitCode;
-        creditAccount(m_msigAddress);
+    function onErrorRepeatCredit(uint32 sdkError, uint32 exitCode) public {  // Код циклит метод, если тот выдает ошибку...   
+    sdkError;
+    exitCode;
+        creditAccount(m_msigAddress); 
     }
 
 
@@ -169,7 +170,7 @@ contract MainDebot is Debot, Upgradable{
         Sdk.getAccountType(tvm.functionId(checkIfStatusIs0), m_address);
     }
 
-    function checkIfStatusIs0(int8 acc_type) public {
+    function checkIfStatusIs0(int8 acc_type) public { //Мы проверяем, загружен ли контракт
         if (acc_type ==  0) {
             deploy();
         } else {
@@ -177,8 +178,7 @@ contract MainDebot is Debot, Upgradable{
         }
     }
 
-
-    function deploy() private view {
+    function deploy() private view {                                   
             TvmCell image = tvm.insertPubkey(m_todoStateInit, m_masterPubKey);
             optional(uint256) none;
             TvmCell deployMsg = tvm.buildExtMsg({
@@ -197,10 +197,9 @@ contract MainDebot is Debot, Upgradable{
     }
 
 
-    function onErrorRepeatDeploy(uint32 sdkError, uint32 exitCode) public view {
-        // TODO: check errors if needed.
-        sdkError;
-        exitCode;
+    function onErrorRepeatDeploy(uint32 sdkError, uint32 exitCode) public view {  //  
+    sdkError;    
+    exitCode;
         deploy();
     }
 
@@ -209,7 +208,7 @@ contract MainDebot is Debot, Upgradable{
     _menu();
     }
 
-    function _menu() virtual public {
+    function _menu() virtual public {  //Показ дефолтной инфы и кнопок для работы с листом покупок. 
         string sep = '----------------------------------------';
         Menu.select(
             format(
@@ -222,20 +221,27 @@ contract MainDebot is Debot, Upgradable{
             ),
             sep,
             [
-                MenuItem("Create new item","",tvm.functionId(createBuy)), //createTask
-                MenuItem("Show list","",tvm.functionId(showList)),  // showTasks
-                MenuItem("Buy","",tvm.functionId(updateBuy)),  // updateTask
-                MenuItem("Delete item","",tvm.functionId(deleteBuy))  //deleteTask
+                MenuItem("Create new item","",tvm.functionId(createBuy)), //Создать предмет для покупки
+                MenuItem("Show list","",tvm.functionId(showList)),  // Показать список предметов
+                MenuItem("Buy","",tvm.functionId(updateBuy)),  // Купить предмет
+                MenuItem("Delete item","",tvm.functionId(deleteBuy))  //Удалить из списка
             ]
         );
     }
-   
-     function createBuy(uint32 index) public {   // Z
+   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~РАБОТА СО СПИСКОМ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     function createBuy(uint32 index) public {   // 
         index = index;
-        Terminal.input(tvm.functionId(createItem_), "One line please:", false);
+        Terminal.input(tvm.functionId(createBuy_), "One line please:", false);
+    } 
+    function createBuy_(string value) public {
+        
+        temptext =  value;         
+        Terminal.input(tvm.functionId(createItem_), "Count please:", false);
     } 
    
-    function createItem_(string value) public view { // Z
+    function createItem_(string value) public {
+        (uint256 num,) = stoi(value);
+        tempuint = num;        
         optional(uint256) pubkey = 0;
         ITodo(m_address).createBuy{
                 abiVer: 2,
@@ -246,9 +252,9 @@ contract MainDebot is Debot, Upgradable{
                 expire: 0,
                 callbackId: tvm.functionId(onSuccess),
                 onErrorId: tvm.functionId(onError)
-            }(value,1);  //Временное решение для тестов. Если оно в таком виде будет на гите, то я забыл.
+            }(temptext,tempuint);  // Не забыть протестировать
     }  
- function showList(uint32 index) public view { //~~
+ function showList(uint32 index) public view { 
         index = index;
         optional(uint256) none;
         ITodo(m_address).getBoys{
@@ -264,7 +270,7 @@ contract MainDebot is Debot, Upgradable{
     }
 
     
- function showBuys_( Buy[] buys ) public {  //~~
+ function showBuys_( Buy[] buys ) public {  
         uint32 i;
         if (buys.length > 0 ) {
             Terminal.print(0, "Your tasks list:");
@@ -288,7 +294,7 @@ function updateBuy(uint32 index) public {
         if (m_buystat.countBuy + m_buystat.countWaiting > 0) {
             Terminal.input(tvm.functionId(updateBuy_), "Enter  number:", false);
         } else {
-            Terminal.print(0, "Sorry, you have no tasks to update");
+            Terminal.print(0, "Sorry, you have no Items to update");
             _menu();
         }
     }   
@@ -316,7 +322,7 @@ function updateBuy_(string value) public {
          if (m_buystat.countBuy + m_buystat.countWaiting > 0) {
             Terminal.input(tvm.functionId(deleteBuy_), "Enter Item number:", false);
         } else {
-            Terminal.print(0, "You have items to delete");
+            Terminal.print(0, "You have no items to delete");
             _menu();
         }
     }
