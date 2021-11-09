@@ -52,7 +52,7 @@ abstract contract MainDebot is Debot, Upgradable{
     address m_address;  // TODO contract address
    
 
-    BuyStat m_buystat;    
+    BuyStat m_buystat;  //Экземпляр структуры 
     uint32 m_taskId;  // Task id for update. I didn't find a way to make this var local
     uint32 m_buyID;  
     uint256 m_masterPubKey; // User pubkey
@@ -123,7 +123,7 @@ abstract contract MainDebot is Debot, Upgradable{
     }
 
 
-    function checkStatus(int8 acc_type) public {    //Проверим состояние контракта.  1 - контракт задеплоен и активен, 0 - залеплоен, -1 - ещё не задеплоен, 2 - заморожен
+    function checkStatus(int8 acc_type) public {    //Проверим состояние контракта.  1 - контракт задеплоен и активен, 0 - Готов к деплою, -1 - ещё не задеплоен, 2 - заморожен
         if (acc_type == 1) { 
             _getBuyStat(tvm.functionId(setStat));
 

@@ -39,8 +39,8 @@ contract base is controller{
         }
         tvm.accept();     
     } 
-     function Alive() public returns (bool a)
-     {
-         a = true;
-     }  
+    function Alive() public returns (bool a)
+    {
+        a = true;
+    }  
 }
