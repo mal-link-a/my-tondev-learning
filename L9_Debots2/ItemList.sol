@@ -93,6 +93,6 @@ function createItem(string text,uint256 val) external  { //Создаем ите
     }
     function Melt() external { //Лочим или делочим контракт
         tvm.accept();     
-      m_ContractFrozen != m_ContractFrozen;
+      m_ContractFrozen = !m_ContractFrozen;
     }
 } 

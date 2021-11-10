@@ -6,12 +6,12 @@ Input arguments:
 init_data: None
 is_update_tvc: None
 
-Seed phrase: "basic drip hollow monkey pig before stuff olympic tunnel entry coral cruise"
-Raw address: 0:55da9179c64342251b8eda260b364014e8f645ff6fa49857d9edf37447e84bec
+Seed phrase: "curtain leader faculty during novel ghost cushion yellow bar coast utility donkey"
+Raw address: 0:ea627639bb8b1e991ce3176724fe8488e8a1f0f559eb28d072825712e993877e
 testnet:
-Non-bounceable address (for init): 0QBV2pF5xkNCJRuO2iYLNkAU6PZF_2-kmFfZ7fN0R-hL7NvO
-Bounceable address (for later access): kQBV2pF5xkNCJRuO2iYLNkAU6PZF_2-kmFfZ7fN0R-hL7IYL
+Non-bounceable address (for init): 0QDqYnY5u4semRzjF2ck_oSI6KHw9VnrKNByglcS6ZOHfuLf
+Bounceable address (for later access): kQDqYnY5u4semRzjF2ck_oSI6KHw9VnrKNByglcS6ZOHfr8a
 mainnet:
-Non-bounceable address (for init): UQBV2pF5xkNCJRuO2iYLNkAU6PZF_2-kmFfZ7fN0R-hL7GBE
-Bounceable address (for later access): EQBV2pF5xkNCJRuO2iYLNkAU6PZF_2-kmFfZ7fN0R-hL7D2B
+Non-bounceable address (for init): UQDqYnY5u4semRzjF2ck_oSI6KHw9VnrKNByglcS6ZOHfllV
+Bounceable address (for later access): EQDqYnY5u4semRzjF2ck_oSI6KHw9VnrKNByglcS6ZOHfgSQ
 Succeeded
