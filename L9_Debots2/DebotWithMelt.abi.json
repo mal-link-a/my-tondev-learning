@@ -10,17 +10,9 @@
 			]
 		},
 		{
-			"name": "_menu_",
+			"name": "menu_2",
 			"inputs": [
-				{"name":"value","type":"uint32"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "finalmenu",
-			"inputs": [
-				{"name":"boo","type":"bool"}
+				{"name":"check","type":"bool"}
 			],
 			"outputs": [
 			]

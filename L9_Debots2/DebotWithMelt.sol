@@ -7,15 +7,13 @@ pragma AbiHeader pubkey;
 import "SecondAbs.sol";
 contract DebotWithMelt is SecondAbs{ 
     bool frozen;
-    
-    function _menu() public override{   //Код при наличии успешного контракта списка покупок
-        _menu_(tvm.functionId(finalmenu));
-    }
 
-    function _menu_(uint32 value) virtual public {  //Он должен видеть, замороженны ли ффункции контракта, и выводить сообветствующие сообщения
-    bool boo;
-      optional(uint256) none;
-        ITodo(m_address).getFrosenStat{
+    function _menu() public override{   // Он должен вытаскивать булевое значение с менючекера в меню 2
+        menuCheck(tvm.functionId(menu_2));
+    }
+    function menuCheck(uint32 value) private view { //Передает флаг заморозки аккаунта
+        optional(uint256) none;
+       ITodo(m_address).getFrosenStat{
                 abiVer: 2,
                 extMsg: true,
                 sign: false,
@@ -26,25 +24,27 @@ contract DebotWithMelt is SecondAbs{
                 onErrorId: tvm.functionId(onError)
             }();
     }
-   
-function finalmenu(bool boo)virtual public{  //Он должен видеть, замороженны ли ффункции контракта, и выводить сообветствующие сообщения    
-     optional(uint256) none;
-     if (boo == true)
-        {
-             string sep = '----------------------------------------';
-        Menu.select(
-            format(
-                "YOUR ACCOUNT IS FROSEN. But you have {}/{}/{} (Purchased/Pending/Total Cost)",                   
+     function menu_2(bool check) public {
+    frozen = check;   
+    TrueMenu();
+    } 
+    function TrueMenu() private{ //Показ меню
+     if (frozen == true)
+            {
+                string sep = '----------------------------------------';
+                Menu.select(
+                    format(
+                        "YOUR ACCOUNT IS FROSEN. But you have {}/{}/{} (Purchased/Pending/Total Cost)",                                         
                      m_buystat.countBuy, //Всего куплено
                      m_buystat.countWaiting, //Всего не куплено
                      m_buystat.totalCost  // Потрачено на покупки
-            ),
-            sep,
-            [
-                MenuItem("Show list","",tvm.functionId(showList)),  // Показать список предметов             
-                MenuItem("Unfreeze","",tvm.functionId(Melt))  //Удалить из списка
-            ]
-        );
+                          ),
+                     sep,
+                          [
+                        MenuItem("Show list","",tvm.functionId(showList)),  // Показать список предметов  
+                        MenuItem("Unfreeze","",tvm.functionId(Melt))  //Удалить из списка
+                          ]
+              );
         }
         else {
             string sep = '----------------------------------------';
@@ -64,9 +64,8 @@ function finalmenu(bool boo)virtual public{  //Он должен видеть, �
                 MenuItem("Freeze account","",tvm.functionId(Melt))
             ]
         );
-        }
+        }      
     }
-
     function Melt () public view 
     {
         optional(uint256) pubkey = 0;

@@ -187,13 +187,13 @@ abstract contract Abstract is Debot, Upgradable{   //Согласно задан
         string name, string version, string publisher, string key, string author,
         address support, string hello, string language, string dabi, bytes icon
     ) {
-        name = "ItensToBuy";
-        version = "0.1";
+        name = "Shopping list";
+        version = "0.4";
         publisher = "malInca";
         key = "Buylist manager";
         author = "malInca";
         support = address.makeAddrStd(0, 0x66e01d6df5a8d7677d9ab2daf7f258f1e2a7fe73da5320300395f99e01dc3b5f);
-        hello = "Hi, i'm a modified by anon TODO DeBot.";
+        hello = "Nya-hello.";
         language = "en";
         dabi = m_debotAbi.get();
         icon = m_icon;

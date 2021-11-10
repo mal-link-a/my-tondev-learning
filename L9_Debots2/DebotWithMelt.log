@@ -1,0 +1,17 @@
+Config: default
+Input arguments:
+     tvc: DebotWithMelt.tvc
+      wc: None
+    keys: DebotWithMelt.keys.json
+init_data: None
+is_update_tvc: None
+
+Seed phrase: "basic drip hollow monkey pig before stuff olympic tunnel entry coral cruise"
+Raw address: 0:55da9179c64342251b8eda260b364014e8f645ff6fa49857d9edf37447e84bec
+testnet:
+Non-bounceable address (for init): 0QBV2pF5xkNCJRuO2iYLNkAU6PZF_2-kmFfZ7fN0R-hL7NvO
+Bounceable address (for later access): kQBV2pF5xkNCJRuO2iYLNkAU6PZF_2-kmFfZ7fN0R-hL7IYL
+mainnet:
+Non-bounceable address (for init): UQBV2pF5xkNCJRuO2iYLNkAU6PZF_2-kmFfZ7fN0R-hL7GBE
+Bounceable address (for later access): EQBV2pF5xkNCJRuO2iYLNkAU6PZF_2-kmFfZ7fN0R-hL7D2B
+Succeeded
