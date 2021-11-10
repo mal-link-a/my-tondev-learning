@@ -22,10 +22,13 @@ struct BuyStat {
 
     mapping(uint32 => Buy) m_boys; 
 
-    modifier onlyOwner() { 
+
+        modifier onlyOwner() {      //Модификатор онли владельца. Здесь везде будет отключен.
         require(msg.pubkey() == m_ownerPubkey, 101);
         _;
     }
+
+
 
      constructor( uint256 pubkey) public { //Записываем публичный ключ владельца контракта при создании
         require(pubkey != 0, 120);
@@ -34,14 +37,14 @@ struct BuyStat {
         m_ownerPubkey = pubkey;
         m_ContractFrozen = false;  
     }
-function createItem(string text, uint count) external onlyOwner { //Создаем итем
+function createItem(string text,uint256 val) external  { //Создаем итем
         require(m_ContractFrozen == false, 101);
         tvm.accept();
         m_count++;
-        m_boys[m_count] = Buy(m_count, text, count, false, 0);
+        m_boys[m_count] = Buy(m_count, text, val, false, 0); 
     }
-    function MakeItemDone(uint32 id,uint costa) external onlyOwner { //Сделаем покупку, выставим цену
-        require(m_ContractFrozen == false, 101);
+    function MakeItemDone(uint32 id,uint costa) external  { //Сделаем покупку, выставим цену
+        require(m_ContractFrozen == false, 101); 
         optional(Buy) buy = m_boys.fetch(id);
         tvm.accept();
         Buy thisBuy = buy.get();
@@ -49,13 +52,13 @@ function createItem(string text, uint count) external onlyOwner { //Создае
         thisBuy.cost = costa;
         m_boys[id] = thisBuy;
     }
-    function deleteItem(uint32 id) external onlyOwner { //Удаляем покупку по Id
-        require(m_ContractFrozen == false, 101);
+    function deleteItem(uint32 id) external  { //Удаляем покупку по Id
+        require(m_ContractFrozen == false, 101); 
         require(m_boys.exists(id), 102); //Проверка наличия
         tvm.accept();
         delete m_boys[id];
     }
-    function getBoys() public view returns (Buy[] buys) { 
+    function getBoys() external view returns (Buy[] buys) { 
         string text;
         uint count;
         bool flagbuy;
@@ -68,7 +71,7 @@ function createItem(string text, uint count) external onlyOwner { //Создае
             buys.push(Buy(id, text, count,flagbuy, cost));
        }
     }
-     function getStat() public view returns (BuyStat buyStat) {
+     function getStat() external view returns (BuyStat buyStat) {
         uint _countBuy=0; //Всего куплено
         uint _countWaiting=0; //Всего не куплено
         uint _totalCost=0; 
@@ -82,12 +85,13 @@ function createItem(string text, uint count) external onlyOwner { //Создае
                 _countWaiting = _countWaiting + buy.count;
             }
         }
-        buyStat = BuyStat( _countBuy, _totalCost,_countWaiting );
+        buyStat = BuyStat( _countBuy, _countWaiting , _totalCost );
     }
-    function getFrosenStat() public view returns (bool boo) {
-        boo = m_ContractFrozen;
+    function getFrosenStat() external view returns (bool) {
+        bool boo = m_ContractFrozen;
+        return (boo);
     }
-    function Melt() external onlyOwner { //Лочим или делочим контракт
+    function Melt() external { //Лочим или делочим контракт
         tvm.accept();     
       m_ContractFrozen != m_ContractFrozen;
     }

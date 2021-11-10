@@ -1,0 +1,75 @@
+{
+	"ABI version": 2,
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"pubkey","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "createItem",
+			"inputs": [
+				{"name":"text","type":"bytes"},
+				{"name":"val","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "MakeItemDone",
+			"inputs": [
+				{"name":"id","type":"uint32"},
+				{"name":"costa","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deleteItem",
+			"inputs": [
+				{"name":"id","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getBoys",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"id","type":"uint32"},{"name":"text","type":"bytes"},{"name":"count","type":"uint256"},{"name":"flagbuy","type":"bool"},{"name":"cost","type":"uint256"}],"name":"buys","type":"tuple[]"}
+			]
+		},
+		{
+			"name": "getStat",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"countBuy","type":"uint256"},{"name":"countWaiting","type":"uint256"},{"name":"totalCost","type":"uint256"}],"name":"buyStat","type":"tuple"}
+			]
+		},
+		{
+			"name": "getFrosenStat",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"bool"}
+			]
+		},
+		{
+			"name": "Melt",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}

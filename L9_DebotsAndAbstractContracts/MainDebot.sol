@@ -62,6 +62,16 @@ abstract contract MainDebot is Debot, Upgradable{
 
     uint32 INITIAL_BALANCE =  200000000;  // Initial TODO contract balance
 
+    TvmCell public stateInit;
+
+    function buildStateInit(TvmCell code, TvmCell data) public {  
+        require(msg.pubkey() == tvm.pubkey(), 101);
+        tvm.accept();       
+        //stateInit = code; //-
+        stateInit = tvm.buildStateInit(code, data);
+        //stateInit = tvm.buildStateInit(code, data);
+    } 
+
 
     function setTodoCode(TvmCell code, TvmCell data) public {
         require(msg.pubkey() == tvm.pubkey(), 101);

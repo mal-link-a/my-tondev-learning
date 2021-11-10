@@ -7,6 +7,9 @@ pragma AbiHeader pubkey;
 import "MainDebot.sol";
 contract BuDebot is MainDebot{ //is MainDebot{ 
 
+ 
+ 
+
     function start() public override {
         Terminal.input(tvm.functionId(saveUserPublicKey),"Please enter your public key",false);
     }
@@ -28,8 +31,6 @@ contract BuDebot is MainDebot{ //is MainDebot{
             ]
         );
     }
-
-
 
 
 }

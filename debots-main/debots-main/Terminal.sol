@@ -4,7 +4,6 @@ pragma ton-solidity >=0.35.0;
 interface ITerminal {
 
 	function input(uint32 answerId, string prompt, bool multiline) external returns (string value);
-	
 	function print(uint32 answerId, string message) external;
 	function printf(uint32 answerId, string fmt, TvmCell fargs) external;
 }

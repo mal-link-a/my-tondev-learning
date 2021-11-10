@@ -7,23 +7,20 @@ pragma AbiHeader pubkey;
 import "Abstract.sol";
 
 abstract contract SecondAbs is Abstract{   //Согласно заданию, нам выдали работающий проект и сказали написать такой же, только другой. Так что попробуем сделать что-то иное и накосячить
-    string temptext; //Переменные для теста
-    uint tempuint;
-  
-    //~~~~~~~~~~~Последующие методы можно оставить здесь, а можно выделить в ещё один контракт~~~~~~~~~~~~~~~~~~~
+    string temptext; //Переменные для теста 
+
  function createBuy(uint32 index) public {   // 
         index = index;
         Terminal.input(tvm.functionId(createBuy_), "One line please:", false);
     } 
-    function createBuy_(string value) public {
-        
+    function createBuy_(string value) public {        
         temptext =  value;         
         Terminal.input(tvm.functionId(createItem_), "Count please:", false);
     } 
    
-    function createItem_(string value) public {
-        (uint256 num,) = stoi(value);
-        tempuint = num;        
+    function createItem_(string value) public view{
+        (uint256 num,) = stoi(value); //Газ
+        //tempuint = num;        
         optional(uint256) pubkey = 0;
         ITodo(m_address).createItem{
                 abiVer: 2,
@@ -34,7 +31,7 @@ abstract contract SecondAbs is Abstract{   //Согласно заданию, н
                 expire: 0,
                 callbackId: tvm.functionId(MyStart),
                 onErrorId: tvm.functionId(onError)
-            }(temptext,tempuint);  // Не забыть протестировать
+            }(temptext, num);  // Не забыть заменить обратно в лист
     }  
  function showList(uint32 index) public view { 
         index = index;
@@ -55,7 +52,7 @@ abstract contract SecondAbs is Abstract{   //Согласно заданию, н
  function showBuys_( Buy[] buys ) public {  
         uint32 i;
         if (buys.length > 0 ) {
-            Terminal.print(0, "Your tasks list:");
+            Terminal.print(0, "Your Item list:");
             for (i = 0; i < buys.length; i++) {
                 Buy buy = buys[i];
                 string completed;
@@ -83,9 +80,10 @@ function updateBuy(uint32 index) public {
 function updateBuy_(string value) public {
         (uint256 num,) = stoi(value);
         m_buyID = uint32(num);
-        ConfirmInput.get(tvm.functionId(updateBuy__),"Is this list completed?");
+        Terminal.input(tvm.functionId(updateBuy__),"How much money was spent?",false);
     }  
-    function updateBuy__(uint value) public view {
+    function updateBuy__(string value) public view {
+        (uint temp,) = stoi(value);
         optional(uint256) pubkey = 0;
         ITodo(m_address).MakeItemDone{
                 abiVer: 2,
@@ -96,7 +94,7 @@ function updateBuy_(string value) public {
                 expire: 0,
                 callbackId: tvm.functionId(MyStart),
                 onErrorId: tvm.functionId(onError)
-            }(m_buyID, value);
+            }(m_buyID, temp);
     }
  
      function deleteBuy(uint32 index) public {

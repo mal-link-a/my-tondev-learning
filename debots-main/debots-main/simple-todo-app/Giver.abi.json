@@ -1,0 +1,43 @@
+{
+	"ABI version": 2,
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendAllAndKill",
+			"inputs": [
+				{"name":"desti","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendAndPayFees",
+			"inputs": [
+				{"name":"desti","type":"address"},
+				{"name":"value","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "send",
+			"inputs": [
+				{"name":"desti","type":"address"},
+				{"name":"value","type":"uint128"}
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}

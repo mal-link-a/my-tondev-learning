@@ -32,7 +32,7 @@ abstract contract ATodo {
    constructor(uint256 pubkey) public {}
 }
 interface ITodo { //Мб,получится это оптимизировать?
-   function createItem(string text, uint count) external;
+   function createItem(string text, uint256 val) external;
    function MakeItemDone(uint32 id,uint costa) external;
    function deleteItem(uint32 id) external;
    function getBoys() external returns (Buy[] boys);
@@ -42,10 +42,8 @@ interface ITodo { //Мб,получится это оптимизировать?
 }
 
 abstract contract Abstract is Debot, Upgradable{   //Согласно заданию, нам выдали работающий проект и сказали написать такой же, только другой. Так что попробуем сделать что-то иное и накосячить
-    bytes m_icon;
-    TvmCell public m_todoCode; // TODO contract code
-    TvmCell public m_todoData;
-    TvmCell public m_todoStateInit;
+    bytes m_icon;   
+    TvmCell public stateInit;
 
     address m_address;  // TODO contract address
     BuyStat m_buystat; 
@@ -61,14 +59,19 @@ abstract contract Abstract is Debot, Upgradable{   //Согласно задан
      function start() public override {
         Terminal.input(tvm.functionId(OnStart),"Please enter your public key",false);
     }
-     
+
+    function buildStateInit(TvmCell code, TvmCell data) public {  
+        require(msg.pubkey() == tvm.pubkey(), 101);
+        tvm.accept();       
+        stateInit = tvm.buildStateInit(code, data);
+    }     
 
     function OnStart(string value) public {  //Запуск бота. Получаем публичный ключ юзера для работы и проверяем наличие списка покупок для него
         (uint val, bool status) = stoi("0x"+value);  
         if (status) {
             m_masterPubKey = val;
             Terminal.print(0, "Checking if you already have a list ...");
-            TvmCell deployState = tvm.insertPubkey(m_todoStateInit, m_masterPubKey);
+            TvmCell deployState = tvm.insertPubkey(stateInit, m_masterPubKey);
             m_address = address.makeAddrStd(0, tvm.hash(deployState));
             Terminal.print(0, format( "Info: your List contract address is {}", m_address));
             Sdk.getAccountType(tvm.functionId(checkStatus), m_address);
@@ -126,7 +129,7 @@ abstract contract Abstract is Debot, Upgradable{   //Согласно задан
         }
     }
      function deploy() private view {  //Деплоим контракт                                 
-            TvmCell image = tvm.insertPubkey(m_todoStateInit, m_masterPubKey);
+            TvmCell image = tvm.insertPubkey(stateInit, m_masterPubKey);
             optional(uint256) none;
             TvmCell deployMsg = tvm.buildExtMsg({
                 abiVer: 2,
@@ -197,6 +200,5 @@ abstract contract Abstract is Debot, Upgradable{   //Согласно задан
     }
 
 
-     
-    //~~~~~~~~~~~Последующие методы можно оставить здесь, а можно выделить в ещё один контракт~~~~~~~~~~~~~~~~~~~
+
 }

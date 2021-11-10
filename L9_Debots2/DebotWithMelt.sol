@@ -5,22 +5,31 @@ pragma AbiHeader pubkey;
 
 
 import "SecondAbs.sol";
-contract DebotWithMelt is SecondAbs{
+contract DebotWithMelt is SecondAbs{ 
+    bool frozen;
+    
+    function _menu() public override{   //Код при наличии успешного контракта списка покупок
+        _menu_(tvm.functionId(finalmenu));
+    }
 
-
-    function _menu() virtual public override{  //Он должен видеть, замороженны ли ффункции контракта, и выводить сообветствующие сообщения
-
-        optional(uint256) none;
-        if (ITodo(m_address).getFrosenStat{
-            abiVer: 2,
-            extMsg: true,
-            sign: false,
-            pubkey: none,
-            time: uint64(now),
-            expire: 0,
-            callbackId: 0,
-            onErrorId: 0
-        }() == true)
+    function _menu_(uint32 value) virtual public {  //Он должен видеть, замороженны ли ффункции контракта, и выводить сообветствующие сообщения
+    bool boo;
+      optional(uint256) none;
+        ITodo(m_address).getFrosenStat{
+                abiVer: 2,
+                extMsg: true,
+                sign: false,
+                pubkey: none,
+                time: uint64(now),
+                expire: 0,
+                callbackId: value,
+                onErrorId: tvm.functionId(onError)
+            }();
+    }
+   
+function finalmenu(bool boo)virtual public{  //Он должен видеть, замороженны ли ффункции контракта, и выводить сообветствующие сообщения    
+     optional(uint256) none;
+     if (boo == true)
         {
              string sep = '----------------------------------------';
         Menu.select(
@@ -57,13 +66,14 @@ contract DebotWithMelt is SecondAbs{
         );
         }
     }
+
     function Melt () public view 
     {
         optional(uint256) pubkey = 0;
         ITodo(m_address).Melt{
                 abiVer: 2,
                 extMsg: true,
-                sign: false,
+                sign: true,
                 pubkey: pubkey,
                 time: uint64(now),
                 expire: 0,
